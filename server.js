@@ -1,17 +1,24 @@
 const products = require("./data/products")
-const users = require("./data/users")
 const express = require("express")
 
 const app = express()
 
 app.use(express.json())
 
-// ----Product APIs------>
 
 
 app.get("/products/:id" , (req,res) => {
-  const id = req.params.id ;
-  res.send(`Product ID : ${id} `)
+const id = Number(req.params.id) ;
+
+ const product = products.find((product) => product.id === id)
+
+ if(!product)
+ return res.status(404).json({
+ status:false , message: "Product Not Found"
+});
+
+ res.json(product)
+  
 })
 
 app.get("/products" , (req , res) => {
@@ -27,27 +34,85 @@ app.get("/products" , (req , res) => {
   }
 })
 
+app.put("/products/:id" ,(req , res) => 
+{
+  const id = Number(req.params.id)
+
+  const name = req.body.name ;
+  const price = req.body.price ;
+  
+  const product = products.find((product) => 
+  product.id === id
+  )
+
+  if(!product) 
+  {
+    return res.status(404).json({status:false , message : "Product Not Found"})
+  }
+
+
+  product.name = name ;
+  product.price = price;
+
+  res.json(product)
+
+
+})
+
 app.post("/products" , (req,res)=> {
  const  name = req.body.name ;
  const  price =  req.body.price;
- res.send(`Product: ${name} , Price : ${price}`)
+
+ if(!name || !price) 
+ {
+  return res.status(400).json({
+    status:false,
+    message : "Name and Price are required"
+  })
+ }
+
+ if(typeof price !== "number")
+ {
+  return res.status(400).json({status:false , message: "Price is not a number"})
+ }
+ 
+ const newProduct = {
+  id : Date.now() ,
+  name ,
+  price ,
+ }
+
+ products.push(newProduct)
+
+ res.status(201).json(newProduct)
+
 })
 
-// app.get("/products" , (req,res) => {
-//   res.json(products)
-// })
+
+app.delete("/products/:id" , (req ,res) => {
+
+  const id = Number(req.params.id)
+
+  if(!id)
+  {
+    return res.status(400).json({status:false , message : "unvalid product id"})
+  }
+
+  const index = products.findIndex((product) => product.id === id)
+ 
+  if(index === -1 )
+  {
+    return res.status(404).json({status:false , message : "unvalid id"})
+  }
+
+  else 
+  {
+     products.splice(index , 1)
+     res.status(200).json({status:true , message : "Product Deleted"}) 
+  }
+  
 
 
-// ------User APIs------->
-
-app.get("/users" ,(req,res) => {
-  res.json(users)
-})
-
-
-app.get("/users/:id" , (req , res) => {
-  const id = req.params.id;
-  res.send(`User ID : ${id}`)
 })
 
 
