@@ -1,14 +1,14 @@
 const users = [
   {
-    id:1,
-    name:"shahzaib",
-    age:23
+    id: 1,
+    name: "Ali",
+    email: "ali@example.com"
   },
-    {
-    id:2,
-    name:"ali",
-    age:12
+  {
+    id: 2,
+    name: "Ahmed",
+    email: "ahmed@example.com"
   }
-]
+];
 
 module.exports = users;
