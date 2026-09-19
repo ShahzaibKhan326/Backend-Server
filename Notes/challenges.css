@@ -1,0 +1,25 @@
+/* 
+
+Frontend => 
+The UI part which use see and interact 
+
+Backend =>
+That handle the things behind the sencce
+
+API =>
+API is the bridge the connect frontend to backend
+
+---------->
+
+Node.js =>
+Node js allow the javascript to run outside of browser 
+
+for our backend  
+
+javascript =>  node.js => express => backend/API
+so Node.js is the runtime , while express is the framwork 
+we,ll use to build our API more easily
+
+----------->
+
+*/
