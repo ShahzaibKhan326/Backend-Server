@@ -1,4 +1,5 @@
-
+const products = require("./data/products")
+const users = require("./data/users")
 const express = require("express")
 
 const app = express()
@@ -20,7 +21,9 @@ app.get("/products" , (req , res) => {
     res.send(`Product Category : ${category}`)
   }
   else {
-    res.send("All Products")
+    // res.send("All Products")
+    res.json(products)
+
   }
 })
 
@@ -30,11 +33,15 @@ app.post("/products" , (req,res)=> {
  res.send(`Product: ${name} , Price : ${price}`)
 })
 
+// app.get("/products" , (req,res) => {
+//   res.json(products)
+// })
+
 
 // ------User APIs------->
 
 app.get("/users" ,(req,res) => {
-  res.send("All Users")
+  res.json(users)
 })
 
 
@@ -42,6 +49,8 @@ app.get("/users/:id" , (req , res) => {
   const id = req.params.id;
   res.send(`User ID : ${id}`)
 })
+
+
 
 app.listen(3000 , () => {
   console.log("Server running on port 3000")
