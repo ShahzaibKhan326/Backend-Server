@@ -1,18 +1,21 @@
-const express = require("express")
+const express = require("express");
 
-const users = require("../data/users")
+const router = express.Router();
 
-const router =  express.Router()
+const users = require("../data/users");
+const apikey = require("../middleware/apikeys");
 
-router.get("/" , (req,res) => {
-  res.json(users)
-})
+// GET all users
+router.get("/", apikey, (req, res) => {
+  res.status(200).json({
+    status: true,
+    message: "Users fetched successfully",
+    data: users
+  });
+});
 
-
-// ------------->
-
-
-router.get("/:id", (req, res) => {
+// GET single user
+router.get("/:id", apikey, (req, res) => {
   const id = Number(req.params.id);
 
   const user = users.find((user) => user.id === id);
@@ -24,13 +27,15 @@ router.get("/:id", (req, res) => {
     });
   }
 
-  res.json(user);
+  res.status(200).json({
+    status: true,
+    message: "User fetched successfully",
+    data: user
+  });
 });
 
-
-// ------------>
-
-router.post("/", (req, res) => {
+// POST user
+router.post("/", apikey, (req, res) => {
   const name = req.body.name;
   const email = req.body.email;
 
@@ -41,22 +46,37 @@ router.post("/", (req, res) => {
     });
   }
 
+  if (typeof name !== "string" || name.trim() === "") {
+    return res.status(400).json({
+      status: false,
+      message: "Name must be a valid string"
+    });
+  }
+
+  if (typeof email !== "string" || !email.includes("@")) {
+    return res.status(400).json({
+      status: false,
+      message: "Invalid email"
+    });
+  }
+
   const newUser = {
     id: Date.now(),
-    name,
+    name: name.trim(),
     email
   };
 
   users.push(newUser);
 
-  res.status(201).json(newUser);
+  res.status(201).json({
+    status: true,
+    message: "User created successfully",
+    data: newUser
+  });
 });
 
-
-// ----------->
-
-
-router.put("/:id", (req, res) => {
+// PUT user
+router.put("/:id", apikey, (req, res) => {
   const id = Number(req.params.id);
 
   const name = req.body.name;
@@ -71,16 +91,39 @@ router.put("/:id", (req, res) => {
     });
   }
 
-  user.name = name;
+  if (!name || !email) {
+    return res.status(400).json({
+      status: false,
+      message: "Name and Email are required"
+    });
+  }
+
+  if (typeof name !== "string" || name.trim() === "") {
+    return res.status(400).json({
+      status: false,
+      message: "Name must be a valid string"
+    });
+  }
+
+  if (typeof email !== "string" || !email.includes("@")) {
+    return res.status(400).json({
+      status: false,
+      message: "Invalid email"
+    });
+  }
+
+  user.name = name.trim();
   user.email = email;
 
-  res.json(user);
+  res.status(200).json({
+    status: true,
+    message: "User updated successfully",
+    data: user
+  });
 });
 
-
-// ----------->
-
-router.delete("/:id", (req, res) => {
+// DELETE user
+router.delete("/:id", apikey, (req, res) => {
   const id = Number(req.params.id);
 
   if (!id) {
@@ -106,6 +149,5 @@ router.delete("/:id", (req, res) => {
     message: "User Deleted"
   });
 });
-
 
 module.exports = router;
