@@ -1,16 +1,21 @@
-const express = require("express")
+const express = require("express");
 
-const productRoutes = require("./routes/productRoutes")
-const userRoutes = require("./routes/userRoutes")
+const productRoutes = require("./routes/productRoutes");
+const userRoutes = require("./routes/userRoutes");
 
+const app = express();
 
-const app = express()
+app.use(express.json());
 
-app.use(express.json())
+app.use("/products", productRoutes);
+app.use("/users", userRoutes);
 
-app.use("/products" , productRoutes)
-app.use("/users" , userRoutes)
-
+app.use((req, res) => {
+  res.status(404).json({
+    status: false,
+    message: "Route Not Found"
+  });
+});
 
 app.use((err, req, res, next) => {
   console.error(err);
@@ -21,12 +26,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(3000 , () => {
-  console.log("Server running on port 3000")
-})
-
-
-
-
-
-
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
