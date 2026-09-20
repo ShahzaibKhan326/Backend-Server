@@ -4,10 +4,11 @@ const express = require("express")
 const router = express.Router()
 
 const products = require("../data/products")
+const apikey = require("../middleware/apikeys")
 
 // ---------->
 
-router.get("/", (req, res) => {
+router.get("/", apikey , (req, res) => {
   const category = req.query.category;
 
   if (category) {

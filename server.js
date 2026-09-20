@@ -7,10 +7,6 @@ const app = express()
 
 app.use(express.json())
 
-app.use((req,res,next) => {
-  console.log("Middleware running")
-})
-
 app.use("/products" , productRoutes)
 app.use("/users" , userRoutes)
 
