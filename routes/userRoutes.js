@@ -5,7 +5,6 @@ const router = express.Router();
 const users = require("../data/users");
 const apikey = require("../middleware/apikeys");
 
-// GET all users
 router.get("/", apikey, (req, res) => {
   res.status(200).json({
     status: true,
@@ -14,7 +13,6 @@ router.get("/", apikey, (req, res) => {
   });
 });
 
-// GET single user
 router.get("/:id", apikey, (req, res) => {
   const id = Number(req.params.id);
 
@@ -34,7 +32,6 @@ router.get("/:id", apikey, (req, res) => {
   });
 });
 
-// POST user
 router.post("/", apikey, (req, res) => {
   const name = req.body.name;
   const email = req.body.email;
@@ -75,7 +72,7 @@ router.post("/", apikey, (req, res) => {
   });
 });
 
-// PUT user
+
 router.put("/:id", apikey, (req, res) => {
   const id = Number(req.params.id);
 
@@ -122,7 +119,6 @@ router.put("/:id", apikey, (req, res) => {
   });
 });
 
-// DELETE user
 router.delete("/:id", apikey, (req, res) => {
   const id = Number(req.params.id);
 
